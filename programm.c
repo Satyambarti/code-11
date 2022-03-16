@@ -1,67 +1,107 @@
 
+#include<stdio.h>
+#include<stdlib.h>
 
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
-struct Node {
+struct Node
+{
 	int data;
-	struct Node* next;
+	struct Node *next;
 };
 
-static void reverse(struct Node** head_ref)
+void insertAtTheBegin(struct Node **start_ref, int data);
+
+
+void bubbleSort(struct Node *start);
+
+
+void swap(struct Node *a, struct Node *b);
+
+
+void printList(struct Node *start);
+
+int main()
 {
-	struct Node* prev = NULL;
-	struct Node* current = *head_ref;
-	struct Node* next = NULL;
-	while (current != NULL) {
-		
-		next = current->next;
+	int arr[] = {12, 56, 2, 11, 1, 90};
+	int list_size, i;
 
-		
-		current->next = prev;
+	
+	struct Node *start = NULL;
 
-		
-		prev = current;
-		current = next;
-	}
-	*head_ref = prev;
+	
+	for (i = 0; i< 6; i++)
+		insertAtTheBegin(&start, arr[i]);
+
+	
+	printf("\n Linked list before sorting ");
+	printList(start);
+
+	
+	bubbleSort(start);
+
+	
+	printf("\n Linked list after sorting ");
+	printList(start);
+
+	getchar();
+	return 0;
 }
 
 
-void push(struct Node** head_ref, int new_data)
+
+void insertAtTheBegin(struct Node **start_ref, int data)
 {
-	struct Node* new_node
-		= (struct Node*)malloc(sizeof(struct Node));
-	new_node->data = new_data;
-	new_node->next = (*head_ref);
-	(*head_ref) = new_node;
+	struct Node *ptr1 = (struct Node*)malloc(sizeof(struct Node));
+	ptr1->data = data;
+	ptr1->next = *start_ref;
+	*start_ref = ptr1;
 }
 
-void printList(struct Node* head)
+
+void printList(struct Node *start)
 {
-	struct Node* temp = head;
-	while (temp != NULL) {
+	struct Node *temp = start;
+	printf("\n");
+	while (temp!=NULL)
+	{
 		printf("%d ", temp->data);
 		temp = temp->next;
 	}
 }
 
-int main()
+void bubbleSort(struct Node *start)
 {
+	int swapped, i;
+	struct Node *ptr1;
+	struct Node *lptr = NULL;
+
 	
-	struct Node* head = NULL;
+	if (start == NULL)
+		return;
 
-	push(&head, 18);
-	push(&head, 4);
-	push(&head, 21);
-	push(&head, 95);
+	do
+	{
+		swapped = 0;
+		ptr1 = start;
 
-	printf("Given linked list\n");
-	printList(head);
-	reverse(&head);
-	printf("\nReversed Linked list \n");
-	printList(head);
-	getchar();
+		while (ptr1->next != lptr)
+		{
+			if (ptr1->data > ptr1->next->data)
+			{
+				swap(ptr1, ptr1->next);
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	}
+	while (swapped);
+}
+
+
+void swap(struct Node *a, struct Node *b)
+{
+	int temp = a->data;
+	a->data = b->data;
+	b->data = temp;
 }
